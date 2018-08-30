@@ -1,7 +1,7 @@
 // nattester is a tool to quickly test ICE traversal when you have ssh working:
 //
 // scp nattester do.not.leak.hostnames.google.com:
-// nattester --initiator=hostname.example.com
+// nattester --responder=hostname.example.com
 package main
 
 import (
@@ -19,7 +19,7 @@ import (
 	"time"
 
 	"github.com/danderson/nat/nat"
-	"github.com/danderson/nat/stun/stun"
+	"github.com/danderson/nat/stun"
 )
 
 var (

@@ -18,8 +18,8 @@ import (
 	"strings"
 	"time"
 
-	"google3/third_party/golang/nat/nat"
-	"google3/third_party/golang/nat/stun/stun"
+	"github.com/danderson/nat/nat"
+	"github.com/danderson/nat/stun/stun"
 )
 
 var (

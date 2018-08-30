@@ -42,6 +42,28 @@ type Packet struct {
 	Alternate *net.UDPAddr
 }
 
+func (packet *Packet) string() string {
+	//func stunToString(packet *stun.Packet) string {
+	classNames := map[int]string{
+		ClassRequest:    "ClassRequest",
+		ClassIndication: "ClassIndication",
+		ClassSuccess:    "ClassSuccess",
+		ClassError:      "ClassError",
+	}
+	methNames := map[int]string{
+		MethodBinding: "MethodBinding",
+	}
+
+	//var cls string
+	//var meth string
+	//var tid []byte
+	//var addr *net.UDPAddr
+	cls := classNames[int(packet.Class)]
+	meth := methNames[int(packet.Method)]
+	return fmt.Sprintf("TID [%x] UseCand %v Addr=%v Clas=%s Meth=%s",
+		packet.Tid, packet.UseCandidate, packet.Addr, cls, meth)
+}
+
 func RandomTid() ([]byte, error) {
 	ret := make([]byte, 12)
 	_, err := io.ReadFull(rand.Reader, ret)

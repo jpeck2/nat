@@ -9,7 +9,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/danderson/nat/stun"
+	"google3/third_party/golang/nat/stun/stun"
 )
 
 const stunTimeout = 5 * time.Second
@@ -19,6 +19,7 @@ var stunserver = flag.String("stunserver", "stun.l.google.com:19302",
 
 var lanNets = []*net.IPNet{
 	{net.IPv4(10, 0, 0, 0), net.CIDRMask(8, 32)},
+	{net.IPv4(100, 64, 0, 0), net.CIDRMask(10, 32)},
 	{net.IPv4(172, 16, 0, 0), net.CIDRMask(12, 32)},
 	{net.IPv4(192, 168, 0, 0), net.CIDRMask(16, 32)},
 	{net.ParseIP("fc00"), net.CIDRMask(7, 128)},
@@ -100,6 +101,11 @@ func pruneDups(cs []candidate) []candidate {
 	return ret
 }
 
+//The RECOMMENDED values of type_prefence (*2^24) are:
+// 126 for host candidates,
+// 100 for server reflexive candidates,
+// 110 for peer reflexive candidates,
+//   0 for relayed candidates
 func setPriorities(c []candidate) {
 	for i := range c {
 		// Prefer LAN over public net.
@@ -128,6 +134,8 @@ skipCandidate:
 	return ret
 }
 
+// GatherCandidates returns the local and reflexive candidates, with blacklist removed.
+// Candidates on local/private addresses (RFC1918) have higher Priority.
 func GatherCandidates(sock *net.UDPConn, ifaces []string, blacklist []*net.IPNet) ([]candidate, error) {
 	laddr := sock.LocalAddr().(*net.UDPAddr)
 	ret := []candidate{}

@@ -32,6 +32,10 @@ func (c *Conn) Read(b []byte) (int, error) {
 	panic("unreachable")
 }
 
+func (c *Conn) GetConn() *net.UDPConn {
+	return c.conn
+}
+
 func (c *Conn) Write(b []byte) (int, error) {
 	return c.conn.WriteTo(b, c.remote)
 }

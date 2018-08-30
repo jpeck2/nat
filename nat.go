@@ -45,7 +45,7 @@ func DefaultConfig() *Config {
 }
 
 // ConnectOpt exchanges Candidates and runs engine to open UDP net.Conn.
-func ConnectOpt(xchg ExchangeCandidatesFun, initiator bool, cfg *Config) (*Conn, error) {
+func ConnectOpt(xchg ExchangeCandidatesFun, initiator bool, cfg *Config) (net.Conn, error) {
 	sock, err := net.ListenUDP("udp", cfg.BindAddress)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func ConnectOpt(xchg ExchangeCandidatesFun, initiator bool, cfg *Config) (*Conn,
 	return conn, nil
 }
 
-func Connect(xchg ExchangeCandidatesFun, initiator bool) (*Conn, error) {
+func Connect(xchg ExchangeCandidatesFun, initiator bool) (net.Conn, error) {
 	return ConnectOpt(xchg, initiator, DefaultConfig())
 }
 

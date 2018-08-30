@@ -9,7 +9,7 @@ import (
 	"net"
 	"time"
 
-	"google3/third_party/golang/nat/stun/stun"
+	"github.com/danderson/nat/stun/stun"
 )
 
 const stunTimeout = 5 * time.Second

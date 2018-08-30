@@ -9,7 +9,7 @@ import (
 	"net"
 	"time"
 
-	"google3/third_party/golang/nat/stun/stun"
+	"github.com/danderson/nat/stun/stun"
 )
 
 // ExchangeCandidatesFun sends/receives Candidates using transport of callers choice.

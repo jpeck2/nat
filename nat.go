@@ -9,7 +9,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/danderson/nat/stun/stun"
+	"github.com/danderson/nat/stun"
 )
 
 // ExchangeCandidatesFun sends/receives Candidates using transport of callers choice.

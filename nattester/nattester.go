@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/danderson/nat/nat"
+	"github.com/danderson/nat"
 	"github.com/danderson/nat/stun"
 )
 

@@ -20,6 +20,20 @@ type Config struct {
 	ProbeTimeout time.Duration
 	// ProbeRetry is max attempts we make to get a BindResponse
 	ProbeRetry int
+
+	// **TODO** remove next 2 fields here and in DefaultConfig
+	// Keep them in until client is updated, since it expects some values.
+	// DecisionTime is how much time we wait before checking (on the
+	// initiator) all the links that successfully communicated (so they got
+	// stun.ClassSuccess in response to a stun.ClassRequest) and deciding
+	// which one to use.
+	DecisionTime time.Duration
+	// PeerDeadline is the duration for which the negotiation must go
+	// on. Please note this must be > DecisionTime because after the
+	// initiator decided which link to use, we need to have one more
+	// complete round-trip (stun.ClassSuccess in response to a
+	// stun.ClassRequest) but with UseCandidate set to true.
+	PeerDeadline time.Duration
 	// Prints all the ongoing handshakes.
 	Verbose bool
 	// Prints more detail on handshakes and internal state
@@ -39,13 +53,15 @@ func DefaultConfig() *Config {
 	return &Config{
 		ProbeRetry:   3,
 		ProbeTimeout: 250 * time.Millisecond,
+		DecisionTime: 4 * time.Second,
+		PeerDeadline: 6 * time.Second,
 		BindAddress:  &net.UDPAddr{},
 		TOS:          -1,
 	}
 }
 
 // ConnectOpt exchanges Candidates and runs engine to open UDP net.Conn.
-func ConnectOpt(xchg ExchangeCandidatesFun, initiator bool, cfg *Config) (net.Conn, error) {
+func ConnectOpt(xchg ExchangeCandidatesFun, initiator bool, cfg *Config) (*Conn, error) {
 	sock, err := net.ListenUDP("udp", cfg.BindAddress)
 	if err != nil {
 		return nil, err
@@ -69,7 +85,7 @@ func ConnectOpt(xchg ExchangeCandidatesFun, initiator bool, cfg *Config) (net.Co
 	return conn, nil
 }
 
-func Connect(xchg ExchangeCandidatesFun, initiator bool) (net.Conn, error) {
+func Connect(xchg ExchangeCandidatesFun, initiator bool) (*Conn, error) {
 	return ConnectOpt(xchg, initiator, DefaultConfig())
 }
 
